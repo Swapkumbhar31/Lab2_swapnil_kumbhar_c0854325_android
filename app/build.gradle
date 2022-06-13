@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "ca.lambton.lab2_swapnil_kumbhar_c0854325_android"
-        minSdk 21
+        minSdk 28
         targetSdk 32
         versionCode 1
         versionName "1.0"
