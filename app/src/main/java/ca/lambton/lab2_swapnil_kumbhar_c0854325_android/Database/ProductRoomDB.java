@@ -17,6 +17,7 @@ public abstract class ProductRoomDB extends RoomDatabase {
         if (productRoomDB == null) {
             productRoomDB = Room
                     .databaseBuilder(context, ProductRoomDB.class, DATABASE_NAME)
+                    .allowMainThreadQueries()
                     .build();
         }
         return productRoomDB;

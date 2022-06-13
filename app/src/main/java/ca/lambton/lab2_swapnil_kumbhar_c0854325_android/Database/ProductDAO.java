@@ -10,6 +10,9 @@ import java.util.List;
 @Dao
 public interface ProductDAO {
 
+    @Query("select * from product")
+    List<Product> getAllProducts();
+
     @Insert
     void addProduct(Product product);
 
@@ -17,10 +20,10 @@ public interface ProductDAO {
     void deleteProductById(int id);
 
     @Query("select * from Product where name like :name")
-    public List<Product> searchProductByName(String name);
+    List<Product> searchProductByName(String name);
 
     @Query("select * from Product where description like :description")
-    public List<Product> searchProductByDescription(String description);
+    List<Product> searchProductByDescription(String description);
 
     @Update
     void updateProduct(Product product);
