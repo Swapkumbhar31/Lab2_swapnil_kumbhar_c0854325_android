@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProductRoomDB productRoomDB;
     private Button nextBtn;
     private Button previousBtn;
+    private ImageView deleteBtn;
+    private ImageView updateBtn;
     private TextView txtProductId;
     private TextView txtProductName;
     private TextView txtProductDescription;
@@ -41,12 +44,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         previousBtn = findViewById(R.id.previousBtn);
+        deleteBtn = findViewById(R.id.deleteBtn);
+        updateBtn = findViewById(R.id.updateBtn);
         nextBtn = findViewById(R.id.nextBtn);
         txtProductId = findViewById(R.id.txtProductId);
         txtProductName = findViewById(R.id.txtProductName);
         txtProductDescription = findViewById(R.id.txtProductDescription);
 
         nextBtn.setOnClickListener(this);
+        previousBtn.setOnClickListener(this);
+        deleteBtn.setOnClickListener(this);
+        updateBtn.setOnClickListener(this);
 
 
         setTitle("Product");
@@ -138,6 +146,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.previousBtn:
                 setProduct(this.index - 1);
+                break;
+            case R.id.deleteBtn:
+                productRoomDB.productDAO().deleteProductById(currentProduct.getId());
+                setProduct(this.index);
                 break;
             default:;
         }
