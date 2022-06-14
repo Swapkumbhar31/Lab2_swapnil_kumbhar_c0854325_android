@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,73 +8,86 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/actionBtnLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:id="@+id/actionBtnLayout"
         android:orientation="horizontal">
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1" />
+
         <ImageView
-            android:layout_width="32dp"
             android:id="@+id/updateBtn"
-            android:src="@drawable/ic_baseline_edit_248"
+            android:layout_width="32dp"
             android:layout_height="32dp"
             android:clickable="true"
-            android:contentDescription="Update product" />
+            android:contentDescription="Update product"
+            android:src="@drawable/ic_baseline_edit_248" />
+
         <View
             android:layout_width="20dp"
             android:layout_height="1dp" />
+
         <ImageView
-            android:layout_width="32dp"
             android:id="@+id/deleteBtn"
-            android:clickable="true"
-            android:src="@drawable/ic_baseline_delete_248"
+            android:layout_width="32dp"
             android:layout_height="32dp"
-            android:contentDescription="Delete product" />
+            android:clickable="true"
+            android:contentDescription="Delete product"
+            android:src="@drawable/ic_baseline_delete_248" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/txtProductId"
-        android:text="@string/id"
-        android:layout_below="@id/actionBtnLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actionBtnLayout"
+        android:text="@string/id" />
 
     <TextView
         android:id="@+id/txtProductName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/productName"
         android:layout_below="@id/txtProductId"
+        android:text="@string/productName"
         android:textColor="@color/black"
         android:textFontWeight="900"
         android:textSize="24sp" />
 
 
-        <TextView
-        android:id="@+id/txtProductDescription"
+    <TextView
+        android:id="@+id/txtProductPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtProductName"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
+        android:textSize="24sp"
+        android:text="@string/productFakePrice" />
+
+    <TextView
+        android:id="@+id/txtProductDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtProductPrice"
+        android:layout_marginTop="20dp"
         android:text="@string/productFakeDescription" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_below="@id/txtProductDescription"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/previousBtn"
             style="@style/ShapeAppearanceOverlay.Material3.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/previousBtn"
             android:text="@string/previous" />
 
         <View
@@ -84,21 +96,22 @@
             android:layout_weight="1" />
 
         <Button
+            android:id="@+id/nextBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/nextBtn"
             android:text="@string/next" />
     </LinearLayout>
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
         android:contentDescription="Add"
         android:elevation="0dp"
         android:text="Add product"
-        android:layout_margin="16dp"
-        app:icon="@drawable/ic_baseline_add"/>
+        app:icon="@drawable/ic_baseline_add" />
 
 </RelativeLayout>

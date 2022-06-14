@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView txtProductId;
     private TextView txtProductName;
     private TextView txtProductDescription;
+    private TextView txtProductPrice;
     private Product currentProduct;
     private int productCount = 0;
     private int index = 0;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nextBtn = findViewById(R.id.nextBtn);
         txtProductId = findViewById(R.id.txtProductId);
         txtProductName = findViewById(R.id.txtProductName);
+        txtProductPrice = findViewById(R.id.txtProductPrice);
         txtProductDescription = findViewById(R.id.txtProductDescription);
 
         nextBtn.setOnClickListener(this);
@@ -131,12 +133,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setProduct(int index) {
         this.index = index;
+        if (this.index == -1) {
+            return;
+        }
         currentProduct = productRoomDB.productDAO().getProductByIndex(index);
 
         previousBtn.setEnabled(index != 0);
+        nextBtn.setEnabled(productCount - 1 != index);
 
         txtProductId.setText("#" + currentProduct.getId());
         txtProductName.setText(currentProduct.getName());
+        txtProductPrice.setText("$" + currentProduct.getPrice());
         txtProductDescription.setText(currentProduct.getDescription());
     }
 
@@ -168,6 +175,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.deleteBtn:
                 productRoomDB.productDAO().deleteProductById(currentProduct.getId());
+                if (productCount == this.index) {
+                    this.index -= 1;
+                }
                 setProduct(this.index);
                 break;
             default:;
