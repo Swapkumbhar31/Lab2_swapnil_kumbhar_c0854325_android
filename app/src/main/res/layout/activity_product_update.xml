@@ -19,6 +19,7 @@
         android:id="@+id/editTextProductPrice"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
+        android:inputType="numberDecimal"
         android:hint="@string/productFakePrice"
         android:layout_height="wrap_content"/>
 

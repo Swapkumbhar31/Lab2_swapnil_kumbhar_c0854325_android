@@ -1,38 +1,30 @@
 package ca.lambton.lab2_swapnil_kumbhar_c0854325_android;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.room.DatabaseConfiguration;
-import androidx.room.InvalidationTracker;
-import androidx.sqlite.db.SupportSQLiteOpenHelper;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import ca.lambton.lab2_swapnil_kumbhar_c0854325_android.Database.Product;
-import ca.lambton.lab2_swapnil_kumbhar_c0854325_android.Database.ProductDAO;
 import ca.lambton.lab2_swapnil_kumbhar_c0854325_android.Database.ProductRoomDB;
 import ca.lambton.lab2_swapnil_kumbhar_c0854325_android.SharedPreferences.UserSettings;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    ActivityResultLauncher<Intent> launcher;
     private ProductRoomDB productRoomDB;
     private Button nextBtn;
     private Button previousBtn;
@@ -44,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView txtProductPrice;
     private Product currentProduct;
     private int productCount = 0;
+    private ExtendedFloatingActionButton addBtn;
     private int index = 0;
-    ActivityResultLauncher<Intent> launcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +52,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtProductName = findViewById(R.id.txtProductName);
         txtProductPrice = findViewById(R.id.txtProductPrice);
         txtProductDescription = findViewById(R.id.txtProductDescription);
+        addBtn = findViewById(R.id.floating_action_button);
 
         nextBtn.setOnClickListener(this);
         previousBtn.setOnClickListener(this);
         deleteBtn.setOnClickListener(this);
         updateBtn.setOnClickListener(this);
+        addBtn.setOnClickListener(this);
 
 
         setTitle("Product");
@@ -73,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         UserSettings userSettings = new UserSettings().getInstance(getApplicationContext());
         boolean firstTimeOpen = new UserSettings().getInstance(getApplicationContext()).isFirstTimeOpen();
-        
+
         if (firstTimeOpen) {
             insertProducts();
             userSettings.setIsFirstTimeOpen(false);
@@ -166,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        Intent intent = new Intent(MainActivity.this, ProductUpdateActivity.class);
         switch (view.getId()) {
             case R.id.nextBtn:
                 setProduct(this.index + 1);
@@ -180,7 +175,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 setProduct(this.index);
                 break;
-            default:;
+            case R.id.updateBtn:
+                intent.putExtra("product_id", currentProduct.getId());
+                launcher.launch(intent);
+                break;
+            case R.id.floating_action_button:
+                launcher.launch(intent);
+            default:
         }
     }
 }

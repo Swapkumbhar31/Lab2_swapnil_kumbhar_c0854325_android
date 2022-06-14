@@ -33,4 +33,7 @@ public interface ProductDAO {
 
     @Query("select count(*) as count from product")
     int getProductsCount();
+
+    @Query("Select * from product where id = :id")
+    Product getProductById(int id);
 }
