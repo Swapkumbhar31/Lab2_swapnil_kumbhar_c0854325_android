@@ -50,7 +50,9 @@ public class ProductUpdateActivity extends AppCompatActivity {
         }
 
         actionButton.setOnClickListener(view -> {
+            if (isValidProduct()) {
 
+            }
         });
 
         editTextProductPrice.setOnKeyListener((view, i, keyEvent) -> {
@@ -62,27 +64,43 @@ public class ProductUpdateActivity extends AppCompatActivity {
             } catch (Exception e) {
                 editTextProductPrice.setError("Invalid price value");
             }
+            checkRequiredError(editTextProductPrice, "Invalid price value");
             return false;
         });
 
         editTextProductName.setOnKeyListener((view, i, keyEvent) -> {
-            String str = editTextProductName.getText().toString();
-            if (str.isEmpty()) {
-                editTextProductName.setError("Invalid name value");
-            } else {
-                editTextProductName.setError(null);
-            }
+            checkRequiredError(editTextProductName, "Invalid name value");
             return false;
         });
 
         editTextProductDescription.setOnKeyListener((view, i, keyEvent) -> {
-            String str = editTextProductDescription.getText().toString();
-            if (str.isEmpty()) {
-                editTextProductDescription.setError("Invalid name value");
-            } else {
-                editTextProductDescription.setError(null);
-            }
+            checkRequiredError(editTextProductDescription, "Invalid description value");
             return false;
         });
+    }
+
+    private void checkRequiredError(EditText editText, String msg) {
+        String str = editText.getText().toString();
+        if (str.isEmpty()) {
+            editText.setError(msg);
+        } else {
+            editText.setError(null);
+        }
+    }
+
+    private boolean isValidProduct() {
+        checkRequiredError(editTextProductPrice, "Invalid price value");
+        checkRequiredError(editTextProductName, "Invalid name value");
+        checkRequiredError(editTextProductDescription, "Invalid description value");
+        if (editTextProductPrice.getError().length() > 0) {
+            return false;
+        }
+        if (editTextProductName.getError().length() > 0) {
+            return false;
+        }
+        if (editTextProductDescription.getError().length() > 0) {
+            return false;
+        }
+        return true;
     }
 }
