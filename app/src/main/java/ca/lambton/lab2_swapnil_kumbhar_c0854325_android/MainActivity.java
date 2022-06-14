@@ -13,25 +13,43 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import ca.lambton.lab2_swapnil_kumbhar_c0854325_android.Database.Product;
 import ca.lambton.lab2_swapnil_kumbhar_c0854325_android.Database.ProductDAO;
 import ca.lambton.lab2_swapnil_kumbhar_c0854325_android.Database.ProductRoomDB;
 import ca.lambton.lab2_swapnil_kumbhar_c0854325_android.SharedPreferences.UserSettings;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ProductRoomDB productRoomDB;
     private Button nextBtn;
     private Button previousBtn;
+    private TextView txtProductId;
+    private TextView txtProductName;
+    private TextView txtProductDescription;
+    private Product currentProduct;
+    private int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Products");
+
+        previousBtn = findViewById(R.id.previousBtn);
+        nextBtn = findViewById(R.id.nextBtn);
+        txtProductId = findViewById(R.id.txtProductId);
+        txtProductName = findViewById(R.id.txtProductName);
+        txtProductDescription = findViewById(R.id.txtProductDescription);
+
+        nextBtn.setOnClickListener(this);
+
+
+        setTitle("Product");
 
         productRoomDB = ProductRoomDB.getInstance(this);
 
@@ -43,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         if (firstTimeOpen) {
             insertProducts();
             userSettings.setIsFirstTimeOpen(false);
+        }
+        if (this.index > -1) {
+            setProduct(this.index);
         }
     }
 
@@ -82,18 +103,43 @@ public class MainActivity extends AppCompatActivity {
                 "The rechargeable battery will power your Magic Mouse for about a month or more between charges. It’s ready to go straight out of the box and pairs automatically with your Mac, and it includes a woven USB-C to Lightning Cable that lets you pair and charge by connecting to a USB-C port on your Mac.", 119.0));
     }
 
+    private void setProduct(int index) {
+        this.index = index;
+        currentProduct = productRoomDB.productDAO().getProductByIndex(index);
+
+        previousBtn.setEnabled(index != 0);
+
+        txtProductId.setText("#" + currentProduct.getId());
+        txtProductName.setText(currentProduct.getName());
+        txtProductDescription.setText(currentProduct.getDescription());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.goto_list) {
+            System.out.println(menuItem.getItemId());
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_activity_menu, menu);
-
-        MenuItem getItem = menu.findItem(R.id.goto_list);
-        if (getItem != null) {
-            AppCompatButton button = (AppCompatButton) getItem.getActionView();
-            //Set a ClickListener, the text,
-            //the background color or something like that
-        }
-
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.nextBtn:
+                setProduct(this.index + 1);
+                break;
+            case R.id.previousBtn:
+                setProduct(this.index - 1);
+                break;
+            default:;
+        }
     }
 }

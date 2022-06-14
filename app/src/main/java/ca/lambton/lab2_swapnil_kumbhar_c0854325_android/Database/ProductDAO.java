@@ -27,4 +27,7 @@ public interface ProductDAO {
 
     @Update
     void updateProduct(Product product);
+
+    @Query("select * from product limit 1 offset :index")
+    Product getProductByIndex(int index);
 }
