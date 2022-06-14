@@ -14,6 +14,9 @@
         android:theme="@style/Theme.Lab2_swapnil_kumbhar_C0854325_Android"
         tools:targetApi="31">
         <activity
+            android:name=".ProductUpdateActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProductList"
             android:exported="false" />
         <activity
