@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         UserSettings userSettings = new UserSettings().getInstance(getApplicationContext());
         boolean firstTimeOpen = new UserSettings().getInstance(getApplicationContext()).isFirstTimeOpen();
 
+//        insertProducts();
         if (firstTimeOpen) {
             insertProducts();
             userSettings.setIsFirstTimeOpen(false);
@@ -126,19 +127,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setProduct(int index) {
-        this.index = index;
-        if (this.index == -1) {
+        if (index == -1) {
             return;
         }
-        currentProduct = productRoomDB.productDAO().getProductByIndex(index);
+        this.index = index;
+        currentProduct = productRoomDB.productDAO().getProductByIndex(this.index);
 
-        previousBtn.setEnabled(index != 0);
-        nextBtn.setEnabled(productCount - 1 != index);
+        previousBtn.setEnabled(this.index != 0);
+        nextBtn.setEnabled(productCount - 1 != this.index);
 
-        txtProductId.setText("#" + currentProduct.getId());
-        txtProductName.setText(currentProduct.getName());
-        txtProductPrice.setText("$" + currentProduct.getPrice());
-        txtProductDescription.setText(currentProduct.getDescription());
+        if (currentProduct != null) {
+            txtProductId.setText("#" + currentProduct.getId());
+            txtProductName.setText(currentProduct.getName());
+            txtProductPrice.setText("$" + currentProduct.getPrice());
+            txtProductDescription.setText(currentProduct.getDescription());
+        } else {
+            System.out.println("Product Index : " + this.index);
+        }
     }
 
     @Override
@@ -170,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.deleteBtn:
                 productRoomDB.productDAO().deleteProductById(currentProduct.getId());
+                productCount = productRoomDB.productDAO().getProductsCount();
                 if (productCount == this.index) {
                     this.index -= 1;
                 }

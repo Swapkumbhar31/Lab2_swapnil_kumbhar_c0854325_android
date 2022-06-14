@@ -2,6 +2,7 @@ package ca.lambton.lab2_swapnil_kumbhar_c0854325_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -51,7 +52,16 @@ public class ProductUpdateActivity extends AppCompatActivity {
 
         actionButton.setOnClickListener(view -> {
             if (isValidProduct()) {
-
+                product.setName(editTextProductName.getText().toString());
+                product.setDescription(editTextProductDescription.getText().toString());
+                if (productId == -1) {
+                    productRoomDB.productDAO().addProduct(product);
+                } else {
+                    productRoomDB.productDAO().updateProduct(product);
+                }
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
             }
         });
 
@@ -92,13 +102,13 @@ public class ProductUpdateActivity extends AppCompatActivity {
         checkRequiredError(editTextProductPrice, "Invalid price value");
         checkRequiredError(editTextProductName, "Invalid name value");
         checkRequiredError(editTextProductDescription, "Invalid description value");
-        if (editTextProductPrice.getError().length() > 0) {
+        if (editTextProductPrice.getError() != null && editTextProductPrice.getError().length() > 0) {
             return false;
         }
-        if (editTextProductName.getError().length() > 0) {
+        if (editTextProductName.getError() != null && editTextProductName.getError().length() > 0) {
             return false;
         }
-        if (editTextProductDescription.getError().length() > 0) {
+        if (editTextProductDescription.getError() != null && editTextProductDescription.getError().length() > 0) {
             return false;
         }
         return true;
