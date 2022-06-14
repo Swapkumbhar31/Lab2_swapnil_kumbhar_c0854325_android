@@ -45,12 +45,9 @@ public class ProductList extends AppCompatActivity {
             public boolean onQueryTextChange(String s) {
                 String query = searchView.getQuery().toString();
                 if (query.isEmpty()) {
-                    System.out.println("query is empty");
                     products = productRoomDB.productDAO().getAllProducts();
                 } else {
-                    System.out.println("query : " + query);
                     products = productRoomDB.productDAO().searchProductByName(query);
-                    System.out.println("query return count : " + products.size());
                 }
                 productListView.setAdapter(new ProductAdaptor(getApplicationContext(), products));
                 return false;

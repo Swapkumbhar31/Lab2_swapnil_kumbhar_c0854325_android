@@ -19,10 +19,10 @@ public interface ProductDAO {
     @Query("Delete from product where id=:id")
     void deleteProductById(int id);
 
-    @Query("select * from Product where name like '%' || :name || '%'")
+    @Query("select * from product where name like '%' || :name || '%'")
     List<Product> searchProductByName(String name);
 
-    @Query("select * from Product where description like :description")
+    @Query("select * from product where description like :description")
     List<Product> searchProductByDescription(String description);
 
     @Update
