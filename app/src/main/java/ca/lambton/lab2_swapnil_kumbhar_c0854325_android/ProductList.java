@@ -1,6 +1,7 @@
 package ca.lambton.lab2_swapnil_kumbhar_c0854325_android;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import android.os.Bundle;
 import android.widget.ListView;
@@ -30,5 +31,30 @@ public class ProductList extends AppCompatActivity {
         productListView = findViewById(R.id.productListView);
 
         productListView.setAdapter(new ProductAdaptor(this, products));
+
+        SearchView searchView = findViewById(R.id.search_bar_text);
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                String query = searchView.getQuery().toString();
+                if (query.isEmpty()) {
+                    System.out.println("query is empty");
+                    products = productRoomDB.productDAO().getAllProducts();
+                } else {
+                    System.out.println("query : " + query);
+                    products = productRoomDB.productDAO().searchProductByName(query);
+                    System.out.println("query return count : " + products.size());
+                }
+                productListView.setAdapter(new ProductAdaptor(getApplicationContext(), products));
+                return false;
+            }
+        });
     }
 }
