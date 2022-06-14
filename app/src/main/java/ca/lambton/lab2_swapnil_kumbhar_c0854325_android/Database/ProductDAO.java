@@ -30,4 +30,7 @@ public interface ProductDAO {
 
     @Query("select * from product limit 1 offset :index")
     Product getProductByIndex(int index);
+
+    @Query("select count(*) as count from product")
+    int getProductsCount();
 }

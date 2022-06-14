@@ -1,5 +1,9 @@
 package ca.lambton.lab2_swapnil_kumbhar_c0854325_android;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -8,6 +12,8 @@ import androidx.room.DatabaseConfiguration;
 import androidx.room.InvalidationTracker;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -36,7 +42,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView txtProductName;
     private TextView txtProductDescription;
     private Product currentProduct;
+    private int productCount = 0;
     private int index = 0;
+    ActivityResultLauncher<Intent> launcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         productRoomDB = ProductRoomDB.getInstance(this);
 
-        productRoomDB.productDAO().getAllProducts();
-
         UserSettings userSettings = new UserSettings().getInstance(getApplicationContext());
         boolean firstTimeOpen = new UserSettings().getInstance(getApplicationContext()).isFirstTimeOpen();
         
@@ -73,6 +79,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (this.index > -1) {
             setProduct(this.index);
         }
+
+        productCount = productRoomDB.productDAO().getProductsCount();
+
+        this.launcher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                    }
+                    productCount = productRoomDB.productDAO().getProductsCount();
+                    setProduct(this.index);
+                });
     }
 
     private void insertProducts() {
@@ -125,7 +143,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.goto_list) {
-            System.out.println(menuItem.getItemId());
+            Intent intent = new Intent(MainActivity.this, ProductList.class);
+            launcher.launch(intent);
             return true;
         }
         return false;
